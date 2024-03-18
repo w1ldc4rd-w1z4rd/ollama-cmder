@@ -31,17 +31,17 @@ $|++;
 my $dt = 
 {
 	# none ~> text, owc
-	txt	      => \&txt_ingest,
+	txt => \&txt_ingest,
 	# text ~> ask
-	prompt 	  => \&prompt_me,
+	prompt => \&prompt_me,
 	# owc, text, ask ~> text
 	tokenizer => \&tokenizer,
 	# text ~> payload
-	llm	  	  => \&llm_config,
+	llm => \&llm_config,
 	# payload, url ~> STDOUT    	
-	ai 		  => \&ai_api,
+	ai => \&ai_api,
 
-	url		  => q|http://localhost:11434/api/generate|,
+	url => q|http://localhost:11434/api/generate|,
 };
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INIT
@@ -206,7 +206,7 @@ sub tokenizer()
 sub ai_api()
 {
 	my $payload = shift;
-	my $url 	= shift;
+	my $url = shift;
 	
 	# say Dumper $payload; # debug
 	
