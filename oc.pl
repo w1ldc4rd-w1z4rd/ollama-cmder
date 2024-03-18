@@ -137,7 +137,7 @@ sub prompt_me()
 	$ask = sprintf qq|\n%s\n%s%s\n%s|
 	, q|-|x80
 	, ($url ? q|Referencing the website mentioned above, | : '' ) 
-	. ($url ? q|b| : q|B| )
+	. (($url and $text) ? q|b| : q|B| )
 	. ($text ? q|ased on the text provided, | : '') 
 	. q|generate a brief and precise response in bullet points, ensuring no critical information is omitted: |
 	, $ask ? $ask : q|Please summarize.|, q|-|x80;
