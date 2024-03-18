@@ -12,6 +12,6 @@
 
 6. **API Call:** The `ai_api()` function sends a summary request to the AI API with the provided payload and URL. It also handles the response from the API and outputs it if not hiding output.
 
-7. **Run the Script:** Run by providing the required input or arguments as mentioned above. For example: `perl clai.pl <input_file>` or `perl clai.pl --url=<website_url>`.
+7. **Run the Script:** Run by providing the required input or arguments as mentioned above. For example: `ol clai.pl <input_file>` or `ol clai.pl --url=<website_url>`.
 
 Keep in mind that you may need to adjust certain aspects of the script based on your specific use case, such as input handling, summary length, or API configuration.  I intend on improving this as time goes on.
