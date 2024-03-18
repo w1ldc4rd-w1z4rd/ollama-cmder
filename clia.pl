@@ -30,11 +30,11 @@ $|++;
 
 my $dt = 
 {
-	txt	      => \&txt_ingest,    # none 		    --> text, owc 
-	prompt 	  => \&prompt_me,     # text 		    --> ask
-	tokenizer => \&tokenizer,     # owc, text, ask  --> text
-	llm	  	  => \&llm_config,    # text            --> payload	
-	ai 		  => \&ai_api,		  # payload, url    --> STDOUT
+	txt	      => \&txt_ingest,    # none            ~> text, owc 
+	prompt 	  => \&prompt_me,     # text            ~> ask
+	tokenizer => \&tokenizer,     # owc, text, ask  ~> text
+	llm	  	  => \&llm_config,    # text            ~> payload	
+	ai 		  => \&ai_api,        # payload, url    ~> STDOUT
 
 	url		  => q|http://localhost:11434/api/generate|,
 };
