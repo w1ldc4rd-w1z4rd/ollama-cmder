@@ -1,4 +1,4 @@
-# CLAI
+# Ollama Commander
 
 ### Command Line AI
 
