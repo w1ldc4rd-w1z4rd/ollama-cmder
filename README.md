@@ -1,50 +1,41 @@
 # Ollama Commander
 
-### Enhanced Interaction with `oc.pl` using the Ollama API
+The oc.pl script fetches text from files or URLs, sends it to the Ollama API with optional user prompts, and outputs AI-generated text responses.
 
-This section of the guide focuses on how you can use `oc.pl` to generate text responses from either local files or web content, utilizing the capabilities of the Ollama API. 
+### Quick Start Guide for `oc.pl`
 
-### Before You Start
+Ensure Perl and required modules (`Term::ANSIColor`, `LWP::UserAgent`, `HTTP::Request`, `JSON::XS`, `Data::Dumper`, `Encode`) are installed.
 
-Make sure Perl is installed on your computer along with these modules: `Term::ANSIColor`, `LWP::UserAgent`, `HTTP::Request`, `JSON::XS`, `Data::Dumper`, and `Encode`. These modules are essential for web requests, JSON handling, and managing encoding operations within the script.
+### Usage
 
-### Running the Script
-
-1. **For File-based Input**: To generate text using content from files, execute the script with the file paths as arguments:
+1. **For Text Files**: Run with file paths as arguments to use file content.
    ```bash
    perl oc.pl myfile.txt anotherfile.txt
    ```
-   The script processes the text from the specified files for your input.
-
-2. **For URL-based Input**: To use text from a webpage, employ the `-url` option like so:
+2. **For a Webpage URL**: Use the `-url` option to process text from a webpage.
    ```bash
    perl oc.pl -url='http://example.com'
    ```
-   This instructs the script to fetch and process the webpage's text content.
-
-3. **Simplifying Output with `-hide`**: Opt for the `-hide` flag if you wish to view only the AI-generated response, omitting extra information:
+3. **Hide Extra Output**: Add `-hide` to see only the AI response.
    ```bash
    perl oc.pl -hide -url='http://example.com'
    ```
 
-### Providing Prompts via Standard Input (Stdin)
+### Providing Prompts via Stdin
 
-The script supports receiving custom prompts through stdin, which allows you to guide the AI's response generation based on your specific needs or questions. Here's an illustrative example using a pipe:
-
+Directly supply a custom prompt through stdin using a pipe, guiding the AI to generate tailored responses:
 ```bash
-echo "Please summarize the main points." | perl oc.pl myfile.txt
+echo "Your prompt here." | perl oc.pl myfile.txt
 ```
 
-In this example, the prompt "Please summarize the main points." is directly fed to `oc.pl` which then processes `myfile.txt` in conjunction with this prompt to generate a response from the Ollama API.
+### Overview
 
-### What the Script Does
+- **Text Processing**: The script reads from specified files or a webpage.
+- **Custom Prompts**: Input custom prompts via stdin for specific guidance to the AI.
+- **API Communication**: Sends formatted input to the Ollama API, fetching a generated response.
+- **Output**: Displays the API's response. Use `-hide` to view only this output.
 
-- **Text Acquisition**: `oc.pl` retrieves text from either the files or URL you specify.
-- **Custom Prompting**: Beyond automatic prompt generation from the processed text, you can directly input your custom prompt via stdin. This can be bypassed with the `-hide` option.
-- **Ollama API Interaction**: After formatting the input text and any custom prompts, the script communicates with the Ollama API for response generation.
-- **Output Presentation**: The response from the Ollama API is displayed in your terminal. Without the `-hide` flag, additional process details are also shown.
+### Tips
 
-### Tips and Tricks
-
-- **Focus on Results**: Use `-hide` to concentrate on the API's response, ideal for when you need clarity and brevity.
-- **Reliability and Error Checking**: The script includes safeguards against common issues such as file access or web request errors, ensuring smooth operation.
+- Ensure smooth operation with correct Perl module installations.
+- Use `-hide` for a focused view on the AI-generated content.
