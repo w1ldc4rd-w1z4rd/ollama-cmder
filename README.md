@@ -44,5 +44,5 @@ Make sure Perl is installed with these modules: `Term::ANSIColor`, `LWP::UserAge
 4. **Rewrite Mode** (`-rewrite`)
    - For rewriting text in a business professional manner:
      ```bash
-     perl oc.pl -rewrite -url='http://example.com'
+     perl oc.pl -rewrite file.txt
      ```
