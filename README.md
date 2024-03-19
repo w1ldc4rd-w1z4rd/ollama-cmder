@@ -20,7 +20,7 @@ Make sure Perl is installed with these modules: `Term::ANSIColor`, `LWP::UserAge
 ### How to Use
 
 1. **Standard Mode**
-   - **URL Fetch**: 
+   - **URL Fetch** `-url=''` 
      ```bash
      perl oc.pl -url='http://example.com'
      ```
