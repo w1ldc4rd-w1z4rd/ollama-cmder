@@ -2,7 +2,7 @@
 
 ### Enhanced Interaction with `oc.pl` using the Ollama API
 
-This section of the guide focuses on how you can use `oc.pl` to generate text responses from either local files or web content, utilizing the capabilities of the Ollama API. Here's how to effectively operate the script, with a special emphasis on using stdin for custom prompts.
+This section of the guide focuses on how you can use `oc.pl` to generate text responses from either local files or web content, utilizing the capabilities of the Ollama API. 
 
 ### Before You Start
 
