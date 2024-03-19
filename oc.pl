@@ -4,8 +4,9 @@
 #
 # by: w1ldc4rd-w1z4rd
 #
-# --hide      ~> hide everything but response
-# --url='URL' ~> crawl url
+#  usage:
+#  perl oc.pl -hide      ~> hide everything but response
+#  perl oc.pl -url='URL' ~> crawl url
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PRAGMAS 
 
@@ -18,11 +19,16 @@ use warnings;
 use Data::Dumper;
 
 use utf8; 
-use open ':std', ':encoding(UTF-8)'; # UTF-8 encoding for standard input/output
-use open ':encoding(UTF-8)', ':std'; # alternative way to do the same as above
+# UTF-8 encoding for standard input/output
+use open ':std', ':encoding(UTF-8)'; 
+# alternative way to do the same as above
+use open ':encoding(UTF-8)', ':std'; 
 use Encode qw(decode);
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GLOBALS
+
+# $url # -url
+# $hide # -hide
 
 $|++;
 
@@ -40,8 +46,7 @@ my $dt =
 	llm => \&llm_config,
 	# payload, url ~> STDOUT    	
 	ai => \&ai_api,
-
-	url => q|http://localhost:11434/api/generate|,
+	url => sub { return q|http://localhost:11434/api/generate| },
 };
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INIT
@@ -51,7 +56,7 @@ my ( $text, $org_word_count ) = $dt->{txt}();
 $dt->{ai}( 
 	$dt->{llm}( 
 		$dt->{tokenizer}( $org_word_count, $text, $dt->{prompt}( $text ) ) 
-	)->(), $dt->{url} );
+	)->(), $dt->{url}() );
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SUB - LLM CONFIG
 
@@ -120,16 +125,16 @@ sub prompt_me()
 	my $text = shift;
 	my $ask;
 	
-	unless ($hide)
+	unless ($hide || !$text)
 	{
 		print YELLOW BOLD q|> prompt: |, RESET;	
 	}
 	
-	$ask = <STDIN>;
-	
+	$ask = <STDIN> if ($text or $url);
+	 
 	if ($ask)
 	{
-		say '' unless $ask =~ m~\n\z~;
+		say '' unless $ask =~ m~^\n$~;
 		chomp $ask;
 	}
 	
@@ -153,52 +158,60 @@ sub tokenizer()
 	my $text  = shift;
 	my $ask   = shift;
 	
-	chomp ( $text );
-	$text = reverse $text;	
-	my $c = 0;
-	
-	my $re_tok = qr~(?x)
-	
-		(?:
-			([[:space:]]+)?[[:alnum:]]+(?1)?
-			|
-			(?1)?[[:punct:]]+(?1)?
-			|
-			(?1)?\p{Any}(?1)?
-			
-		){1,9000}~;
-	
-	if ($text =~ m~^${re_tok}~)
+	if ($text)
 	{
-		$text = $&;
-	}	
-
-	$text = reverse $text;
 	
-	no warnings;
-	if ($word_count > 0 and !$hide)
-	{
-		my $re_nl = qr|[^\n\r\x{0B}\x{0C}\x{85}\x{2028}\x{2029}]|;
+		chomp ( $text );
+		$text = reverse $text;	
+		my $c = 0;
 		
-		# printf qq|TEXT:\n%s\n%s\n%s\n|, q|-|x80, $text, q|-|x80; # debug
+		my $re_tok = qr~(?x)
 		
-		printf qq|BEGIN   : %s\n|, ( $text =~ s~^(${re_nl}{1,150}).*~$1~sr  ) =~ s~\ +~ ~rg; 
-		printf qq|END     : %s\n|, ( $text =~ s~.*?(${re_nl}{1,150})$~$1~sr ) =~ s~\ +~ ~rg;
-		
-		my $trim_count = scalar(split(m~\s+~, $text));
+			(?:
+				([[:space:]]+)?[[:alnum:]]+(?1)?
+				|
+				(?1)?[[:punct:]]+(?1)?
+				|
+				(?1)?\p{Any}(?1)?
 				
-		printf qq|TRIMMED : %s\n|, $trim_count unless $trim_count ==  $word_count;	
-		printf qq|WORDS   : %s|, $word_count;
+			){1,9000}~;
+		
+		if ($text =~ m~^${re_tok}~)
+		{
+			$text = $&;
+		}	
+	
+		$text = reverse $text;
+		
+		no warnings;
+		if ($word_count > 0 and !$hide)
+		{
+			my $re_nl = qr|[^\n\r\x{0B}\x{0C}\x{85}\x{2028}\x{2029}]|;
+			
+			# printf qq|TEXT:\n%s\n%s\n%s\n|, q|-|x80, $text, q|-|x80; # debug
+			
+			printf qq|BEGIN   : %s\n|, ( $text =~ s~^(${re_nl}{1,150}).*~$1~sr  ) =~ s~\ +~ ~rg; 
+			printf qq|END     : %s\n|, ( $text =~ s~.*?(${re_nl}{1,150})$~$1~sr ) =~ s~\ +~ ~rg;
+			
+			my $trim_count = scalar(split(m~\s+~, $text));
+					
+			printf qq|TRIMMED : %s\n|, $trim_count unless $trim_count ==  $word_count;	
+			printf qq|WORDS   : %s|, $word_count;
+		}
+		
+		say $ask unless $hide; 
+		
+		$text .= $ask;
+		
+		$text =~ s~\x{27}~\x{2018}~g;
+		$text =~ s~\x{22}~\x{201F}~g;
+		
+		return $text;
 	}
-	
-	say $ask unless $hide; 
-	
-	$text .= $ask;
-	
-	$text =~ s~\x{27}~\x{2018}~g;
-	$text =~ s~\x{22}~\x{201F}~g;
-	
-	return $text;
+	else
+	{
+		return $ask;	
+	}
 }
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SUB - AI API
