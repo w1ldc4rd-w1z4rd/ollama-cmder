@@ -2,39 +2,47 @@
 
 The oc.pl script fetches text from files or URLs, sends it to the Ollama API with optional user prompts, and outputs AI-generated text responses.
 
-### Overview
+### Script Features Explained
 
-- **Text Processing**: The script reads from specified files or a webpage.
-- **Custom Prompts**: Input custom prompts via stdin for specific guidance to the AI.
-- **API Communication**: Sends formatted input to the Ollama API, fetching a generated response.
-- **Output**: Displays the API's response. Use `-hide` to view only this output.
+- **Input Flexibility**: Use text from local files or fetch content from the web.
+- **Output Control**: The `-hide` option streamlines the output to just the AI's response.
+- **Custom Prompts**: With `-freestyle`, input any prompt directly for tailored AI responses.
+- **Professional Rewriting**: The `-rewrite` feature refines text to a business professional tone.
 
-### Quick Start Guide for oc.pl
+### Using `oc.pl` Script: A Guide with Code Examples
 
-Ensure Perl and required modules (`Term::ANSIColor`, `LWP::UserAgent`, `HTTP::Request`, `JSON::XS`, `Data::Dumper`, `Encode`) are installed.
+The `oc.pl` script enables processing text from files or URLs for AI-generated content creation. It supports various modes for different requirements, such as direct response generation and text rewriting.
 
-### Usage
+### Setup
 
-**For Text Files**: Run with file paths as arguments to use file content.
+Make sure Perl is installed with these modules: `Term::ANSIColor`, `LWP::UserAgent`, `HTTP::Request`, `JSON::XS`, `Data::Dumper`, `Encode`.
 
-```bash
-perl oc.pl myfile.txt anotherfile.txt
-```
+### How to Use
 
-**For a Webpage URL**: Use the `-url` option to process text from a webpage.
+1. **Standard Mode**
+   - **URL Fetch**: 
+     ```bash
+     perl oc.pl -url='http://example.com'
+     ```
+   - **File Input**: 
+     ```bash
+     perl oc.pl myfile.txt
+     ```
 
-```bash
-perl oc.pl -url='http://example.com'
-```
-**Hide Extra Output**: Add `-hide` to see only the AI response.
+2. **Hide Mode** (`-hide`)
+   - Hides everything but the AI response.
+     ```bash
+     perl oc.pl -hide -url='http://example.com'
+     ```
 
-```bash
-perl oc.pl -hide -url='http://example.com'
-```
+3. **Freestyle Mode** (`-freestyle`)
+   - Allows for a custom prompt. Here's how to use it with echo and a pipe for input:
+     ```bash
+     echo "Describe the impact of global warming." | perl oc.pl -freestyle
+     ```
 
-### Providing Prompts via Stdin
-
-Directly supply a custom prompt through stdin using a pipe, guiding the AI to generate tailored responses:
-```bash
-echo "Your prompt here." | perl oc.pl myfile.txt
-```
+4. **Rewrite Mode** (`-rewrite`)
+   - For rewriting text in a business professional manner:
+     ```bash
+     perl oc.pl -rewrite -url='http://example.com'
+     ```
