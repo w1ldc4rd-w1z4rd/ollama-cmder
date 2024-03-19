@@ -4,7 +4,7 @@ The oc.pl script fetches text from files or URLs, sends it to the Ollama API wit
 
 ### Script Features Explained
 
-- **Input Flexibility**: Use text from local files or fetch content from the web.
+- **Input Flexibility**: Use text from local files or fetch content from the web `-url=''`.
 - **Output Control**: The `-hide` option streamlines the output to just the AI's response.
 - **Custom Prompts**: With `-freestyle`, input any prompt directly for tailored AI responses.
 - **Professional Rewriting**: The `-rewrite` feature refines text to a business professional tone.
