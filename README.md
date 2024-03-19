@@ -8,18 +8,22 @@ Ensure Perl and required modules (`Term::ANSIColor`, `LWP::UserAgent`, `HTTP::Re
 
 ### Usage
 
-1. **For Text Files**: Run with file paths as arguments to use file content.
-   ```bash
-   perl oc.pl myfile.txt anotherfile.txt
-   ```
-2. **For a Webpage URL**: Use the `-url` option to process text from a webpage.
-   ```bash
-   perl oc.pl -url='http://example.com'
-   ```
-3. **Hide Extra Output**: Add `-hide` to see only the AI response.
-   ```bash
-   perl oc.pl -hide -url='http://example.com'
-   ```
+**For Text Files**: Run with file paths as arguments to use file content.
+
+```bash
+perl oc.pl myfile.txt anotherfile.txt
+```
+
+**For a Webpage URL**: Use the `-url` option to process text from a webpage.
+
+```bash
+perl oc.pl -url='http://example.com'
+```
+**Hide Extra Output**: Add `-hide` to see only the AI response.
+
+```bash
+perl oc.pl -hide -url='http://example.com'
+```
 
 ### Providing Prompts via Stdin
 
