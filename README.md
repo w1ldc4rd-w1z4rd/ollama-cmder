@@ -1,17 +1,50 @@
 # Ollama Commander
 
-1. **Prerequisites:** Required modules such as `Term::ANSIColor`, `LWP::UserAgent`, `HTTP::Request`, `JSON::XS`, and `Data::Dumper` 
+### Enhanced Interaction with `oc.pl` using the Ollama API
 
-2. **Input:** The script accepts input from the command-line arguments, a file, or a URL. You can either provide a text file containing the text you want to summarize as an argument or pass a URL to fetch content from a website. If no input is provided, it will read from STDIN.
+This section of the guide focuses on how you can use `oc.pl` to generate text responses from either local files or web content, utilizing the capabilities of the Ollama API. Here's how to effectively operate the script, with a special emphasis on using stdin for custom prompts.
 
-3. **Interactive Prompt:** The script uses the `prompt_me()` function to ask for a summary prompt if needed. You can hide this step by setting the environment variable `--hide` to true before running the script.
+### Before You Start
 
-4. **Tokenization:** The `tokenizer()` function tokenizes the input text based on space, punctuation, and other characters. It also trims extra spaces and checks the word count against the expected word count.
+Make sure Perl is installed on your computer along with these modules: `Term::ANSIColor`, `LWP::UserAgent`, `HTTP::Request`, `JSON::XS`, `Data::Dumper`, and `Encode`. These modules are essential for web requests, JSON handling, and managing encoding operations within the script.
 
-5. **LLM Configuration:** This step is used to configure the Language Model for Large Texts (LLM) using a configuration hash. The default configuration uses the Mistral model, but you can change it as needed.
+### Running the Script
 
-6. **API Call:** The `ai_api()` function sends a summary request to the AI API with the provided payload and URL. It also handles the response from the API and outputs it if not hiding output.
+1. **For File-based Input**: To generate text using content from files, execute the script with the file paths as arguments:
+   ```bash
+   perl oc.pl myfile.txt anotherfile.txt
+   ```
+   The script processes the text from the specified files for your input.
 
-7. **Run the Script:** Run by providing the required input or arguments as mentioned above. For example: `ol clai.pl <input_file>` or `ol clai.pl --url=<website_url>`.
+2. **For URL-based Input**: To use text from a webpage, employ the `-url` option like so:
+   ```bash
+   perl oc.pl -url='http://example.com'
+   ```
+   This instructs the script to fetch and process the webpage's text content.
 
-Keep in mind that you may need to adjust certain aspects of the script based on your specific use case, such as input handling, summary length, or API configuration.  I intend on improving this as time goes on.
+3. **Simplifying Output with `-hide`**: Opt for the `-hide` flag if you wish to view only the AI-generated response, omitting extra information:
+   ```bash
+   perl oc.pl -hide -url='http://example.com'
+   ```
+
+### Providing Prompts via Standard Input (Stdin)
+
+The script supports receiving custom prompts through stdin, which allows you to guide the AI's response generation based on your specific needs or questions. Here's an illustrative example using a pipe:
+
+```bash
+echo "Please summarize the main points." | perl oc.pl myfile.txt
+```
+
+In this example, the prompt "Please summarize the main points." is directly fed to `oc.pl` which then processes `myfile.txt` in conjunction with this prompt to generate a response from the Ollama API.
+
+### What the Script Does
+
+- **Text Acquisition**: `oc.pl` retrieves text from either the files or URL you specify.
+- **Custom Prompting**: Beyond automatic prompt generation from the processed text, you can directly input your custom prompt via stdin. This can be bypassed with the `-hide` option.
+- **Ollama API Interaction**: After formatting the input text and any custom prompts, the script communicates with the Ollama API for response generation.
+- **Output Presentation**: The response from the Ollama API is displayed in your terminal. Without the `-hide` flag, additional process details are also shown.
+
+### Tips and Tricks
+
+- **Focus on Results**: Use `-hide` to concentrate on the API's response, ideal for when you need clarity and brevity.
+- **Reliability and Error Checking**: The script includes safeguards against common issues such as file access or web request errors, ensuring smooth operation.
