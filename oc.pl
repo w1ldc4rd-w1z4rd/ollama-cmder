@@ -5,8 +5,10 @@
 # by: w1ldc4rd-w1z4rd
 #
 #  usage:
-#  perl oc.pl -hide      ~> hide everything but response
 #  perl oc.pl -url='URL' ~> crawl url
+#  perl oc.pl -hide      ~> hide everything but response
+#  perl oc.pl -freestyle ~> no boiler plate
+#  perl oc.pl -rewrite   ~> rewrite text (buisness professional)
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PRAGMAS 
 
@@ -27,8 +29,11 @@ use Encode qw(decode);
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GLOBALS
 
-# $url # -url
+# these are valid with -s
+# $url # -url=''
 # $hide # -hide
+# $rewrite # -rewrite
+# $freestyle # -freestyle
 
 $|++;
 
@@ -89,7 +94,6 @@ sub txt_ingest()
 	}
 	elsif (@ARGV)
 	{
-		
 		map
 		{
 			chomp;
@@ -125,12 +129,15 @@ sub prompt_me()
 	my $text = shift;
 	my $ask;
 	
-	unless ($hide || !$text)
+	unless ($hide || !$text || $rewrite)
 	{
 		print YELLOW BOLD q|> prompt: |, RESET;	
 	}
 	
-	$ask = <STDIN>;
+	unless ($rewrite)
+	{
+		$ask = <STDIN>;
+	}
 	 
 	if ($ask)
 	{
@@ -139,15 +146,29 @@ sub prompt_me()
 	}
 	
 	no warnings;
-	$ask = sprintf qq|\n%s\n%s%s\n%s|
-	, q|-|x80
-	, ($url ? q|Referencing the website mentioned above, | : '' ) 
-	. ($url ? q|b| : q|B| )
-	. q|ased on the text provided, | 
-	. q|generate a brief and precise response in bullet points, ensuring no critical information is omitted: |
-	, $ask ? $ask : q|Please summarize.|, q|-|x80;
+	if ($freestyle)
+	{
+		return ( qq|\n| . q|-|x80 . qq|\n$ask\n| . q|-|x80 );
+	}
+	elsif($rewrite)
+	{
+		return qq|\n\nI'm looking for a rewrite of the text above. The rewritten version should be business professional, yet casual, and concise. Please ensure that the message remains clear and direct.| #'
+	}
+	else
+	{
+		no warnings;
+		$ask = sprintf qq|\n%s\n%s%s\n%s|
+		, q|-|x80
+		, ($url ? q|Referencing the website mentioned above, | : '' ) 
+		. ($url ? q|b| : q|B| )
+		. q|ased on the text provided, | 
+		. q|generate a brief and precise response in bullet points, ensuring no critical information is omitted: |
+		, $ask ? $ask : q|Please summarize.|, q|-|x80;
+		
+		return $ask;
+	}
 	
-	return $ask;
+	
 };
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SUB - TOKENIZER  
@@ -184,22 +205,28 @@ sub tokenizer()
 		$text = reverse $text;
 		
 		no warnings;
-		if ($word_count > 0 and !$hide)
+		
+		unless ($rewrite)
 		{
-			my $re_nl = qr|[^\n\r\x{0B}\x{0C}\x{85}\x{2028}\x{2029}]|;
-			
-			# printf qq|TEXT:\n%s\n%s\n%s\n|, q|-|x80, $text, q|-|x80; # debug
-			
-			printf qq|BEGIN   : %s\n|, ( $text =~ s~^(${re_nl}{1,150}).*~$1~sr  ) =~ s~\ +~ ~rg; 
-			printf qq|END     : %s\n|, ( $text =~ s~.*?(${re_nl}{1,150})$~$1~sr ) =~ s~\ +~ ~rg;
-			
-			my $trim_count = scalar(split(m~\s+~, $text));
-					
-			printf qq|TRIMMED : %s\n|, $trim_count unless $trim_count ==  $word_count;	
-			printf qq|WORDS   : %s|, $word_count;
+			if ($word_count > 0 and !$hide)
+			{
+				my $re_nl = qr|[^\n\r\x{0B}\x{0C}\x{85}\x{2028}\x{2029}]|;
+				
+				# printf qq|TEXT:\n%s\n%s\n%s\n|, q|-|x80, $text, q|-|x80; # debug
+				
+				say q|| if $freestyle or $text;
+				
+				printf qq|BEGIN   : %s\n|, ( $text =~ s~^(${re_nl}{1,150}).*~$1~sr  ) =~ s~\ +~ ~rg; 
+				printf qq|END     : %s\n|, ( $text =~ s~.*?(${re_nl}{1,150})$~$1~sr ) =~ s~\ +~ ~rg;
+				
+				my $trim_count = scalar(split(m~\s+~, $text));
+						
+				printf qq|TRIMMED : %s\n|, $trim_count unless $trim_count ==  $word_count;	
+				printf qq|WORDS   : %s|, $word_count;
+			}
 		}
 		
-		say $ask unless $hide; 
+		say $ask unless $hide or $rewrite; 
 		
 		$text .= $ask;
 		
