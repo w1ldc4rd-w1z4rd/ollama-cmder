@@ -130,11 +130,11 @@ sub prompt_me()
 		print YELLOW BOLD q|> prompt: |, RESET;	
 	}
 	
-	$ask = <STDIN> if ($text or $url);
+	$ask = <STDIN>;
 	 
 	if ($ask)
 	{
-		say '' unless $ask =~ m~^\n$~;
+		say '' unless $ask =~ m~(?!=.)\n~m;
 		chomp $ask;
 	}
 	
@@ -142,8 +142,8 @@ sub prompt_me()
 	$ask = sprintf qq|\n%s\n%s%s\n%s|
 	, q|-|x80
 	, ($url ? q|Referencing the website mentioned above, | : '' ) 
-	. (($url and $text) ? q|b| : q|B| )
-	. ($text ? q|ased on the text provided, | : '') 
+	. ($url ? q|b| : q|B| )
+	. q|ased on the text provided, | 
 	. q|generate a brief and precise response in bullet points, ensuring no critical information is omitted: |
 	, $ask ? $ask : q|Please summarize.|, q|-|x80;
 	
