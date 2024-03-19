@@ -2,6 +2,13 @@
 
 The oc.pl script fetches text from files or URLs, sends it to the Ollama API with optional user prompts, and outputs AI-generated text responses.
 
+### Overview
+
+- **Text Processing**: The script reads from specified files or a webpage.
+- **Custom Prompts**: Input custom prompts via stdin for specific guidance to the AI.
+- **API Communication**: Sends formatted input to the Ollama API, fetching a generated response.
+- **Output**: Displays the API's response. Use `-hide` to view only this output.
+
 ### Quick Start Guide for oc.pl
 
 Ensure Perl and required modules (`Term::ANSIColor`, `LWP::UserAgent`, `HTTP::Request`, `JSON::XS`, `Data::Dumper`, `Encode`) are installed.
@@ -31,15 +38,3 @@ Directly supply a custom prompt through stdin using a pipe, guiding the AI to ge
 ```bash
 echo "Your prompt here." | perl oc.pl myfile.txt
 ```
-
-### Overview
-
-- **Text Processing**: The script reads from specified files or a webpage.
-- **Custom Prompts**: Input custom prompts via stdin for specific guidance to the AI.
-- **API Communication**: Sends formatted input to the Ollama API, fetching a generated response.
-- **Output**: Displays the API's response. Use `-hide` to view only this output.
-
-### Tips
-
-- Ensure smooth operation with correct Perl module installations.
-- Use `-hide` for a focused view on the AI-generated content.
