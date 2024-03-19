@@ -2,7 +2,7 @@
 
 The oc.pl script fetches text from files or URLs, sends it to the Ollama API with optional user prompts, and outputs AI-generated text responses.
 
-### Quick Start Guide for `oc.pl`
+### Quick Start Guide for oc.pl
 
 Ensure Perl and required modules (`Term::ANSIColor`, `LWP::UserAgent`, `HTTP::Request`, `JSON::XS`, `Data::Dumper`, `Encode`) are installed.
 
